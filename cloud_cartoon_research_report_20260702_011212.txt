@@ -1,0 +1,115 @@
+ANALİZ:
+Çocuk çizgi filmi üretimi, animasyon, ses, dudak senkronu, montaj ve yayın aşamalarını içerir. Ana karakter verildiğinde 5–7 dakikalık bölüm üretebilmek için otonom bulut tabanlı bir sistem isteniyor. Çizgi film üretiminin her aşaması farklı teknoloji ve araç bileşenleri gerektirir. Ayrıca sistemin maliyet, karakter tutarlılığı ve performans geri beslemesi gibi parametrelerle optimize edilmesi gerekir. OpenAI API kullanımı ve n8n gibi otomasyon araçları sistem entegrasyonunda kritik rol oynar.
+
+PROBLEM:
+Maliyet limitleri içinde (özellikle maksimum 2 USD OpenAI API bütçesi) ve kaynak 30 sınırında, kaliteli, karakter tutarlı, 5–7 dakikalık çocuk çizgi filmi bölümü üretebilmek için sade, ancak tam kapsamlı bir bulut tabanlı mimari tasarımı yapmak.
+
+NET DÜŞÜNCE:
+- Video üretim teknolojileri hala yüksek maliyetli ve kaynak yoğun.
+- Karakter tutarlılığı için veri tabanı ve hafıza yönetimi zorunlu.
+- OpenAI API ses ve dil üretimi için uygun ancak çok yüksek maliyetlerde olabilir; bütçe çok sınırlı.
+- n8n benzeri iş akışı otomasyon araçları entegrasyonu sağlar, işleri kolaylaştırır.
+- Dudak senkronu için özel algoritmalar veya servisler gerekir; bazı open source araçlar mevcut.
+- Ses sentezi için OpenAI dışında daha uygun maliyetli ve karakter odaklı TTS çözümleri tercih edilebilir.
+- Video üretimi V1 aşamada planlanmadığından, temel olarak metin ve senaryo üretimi, ses ve dudak senkronu için altyapı tasarlanmalı.
+- Performans geri besleme ve maliyet kontrolü mimari tasarımın vazgeçilmez parçası.
+- Custom kod, özel iş mantığı için küçük ve modüler olmalı.
+- Publish modülü basit ve bulut tabanlı depolama + içerik dağıtım servisi (CDN) üzerine kurulmalı.
+
+ÖNERİLEN V1 SİSTEM MİMARİSİ:
+1. Girdi: Ana karakter bilgisi (metin, görsel veri).
+2. Senaryo üretimi: OpenAI API (ChatGPT) + Custom code.
+3. Ses üretimi: Maliyet avantajlı Cloud TTS API (Google Cloud Text-to-Speech v.b.).
+4. Dudak senkronizasyonu: Custom code veya open source (ör: Rhubarb Lip Sync).
+5. Montaj: Basit bulut tabanlı video editör altyapısı (şimdilik placeholder, sonrasında entegre).
+6. Yayın: Bulut depolama + CDN.
+7. İş akış otomasyonu: n8n workflow ile ara süreçlerin yönetimi.
+8. Veri Tabanı: Karakter ve senaryo hafızası için NoSQL (MongoDB Atlas gibi).
+9. Performans ve maliyet izleme: Custom dashboard + API kullanım izleme.
+10. Feedback loop: Kullanıcı etkileşim verisi toplanıp sistem optimize edilir.
+
+N8N İLE YAPILACAK İŞLER:
+- Workflow otomasyonu (senaryo -> ses üretimi -> senkronizasyon -> montaj -> yayın).
+- API çağrılarının yönetimi.
+- Hata yakalama ve yeniden deneme mekanizmaları.
+- Maliyet ve performans verilerinin toplanması.
+
+CUSTOM CODE İLE YAPILACAK İŞLER:
+- Ana karakter verisinin analizi ve senaryo üretiminde parametreleme.
+- Dudak senkronizasyonu motoru.
+- Montaj ve video placeholder yönetimi.
+- Performans geri besleme ve maliyet kontrol modülü.
+- Veritabanı CRUD işlemleri.
+- Yayın ve CDN entegrasyonu.
+
+OPENAI API İLE YAPILACAK İŞLER:
+- Senaryo ve diyalog üretimi (ChatGPT).
+- Story ve karakter tutarlılığı kontrolü.
+
+BROWSER AGENT İLE YAPILACAK İŞLER:
+- Kullanıcı ara yüzü (girdi verme, sonuç izleme).
+- Performans ve maliyet raporlarının görüntülenmesi.
+
+GÖRSEL / VİDEO ÜRETİM ARAÇLARI:
+- V1 için doğrudan video üretimi yapılmıyor.
+- Montaj aşaması placeholder olarak adlandırılır, ilerleyen versiyonlarda entegre edilecek.
+
+2D ÇİZGİ FİLM / RIG ARAÇLARI:
+- V1'de görsel işlenmez, karakter rigging sonraki sürümlerde geçerli.
+- Temel karakter verisi ve hafıza tabanı ile tutarlılık sağlanır.
+
+SES VE DUDAK SENKRONU:
+- TTS servis ile uygun karakter sesi oluşturulur.
+- Dudak senkronu custom script veya open source Rhubarb LIPSYNC (ücretsiz).
+- OpenAI API ses üretimi maliyet / performans açısından tercih edilmez.
+
+DATABASE / HAFIZA YAPISI:
+- MongoDB Atlas (ücretsiz katmanı kullanılabilir).
+- Ana karakter bilgisi, senaryo geçmişi, TTS parametreleri saklanır.
+
+ÜRETİM AKIŞI:
+1. Kullanıcı ana karakter metni ve var ise görseli girer.
+2. n8n başlatılır, OpenAI API’ye senaryo üretimi için çağrı yapar.
+3. Senaryo çıktı alındıktan sonra TTS API’sine ses üretimi gönderilir.
+4. Dudak senkronu scripti ses ve metne uygulanır.
+5. Montaj aşaması placeholder ile tamamlanır.
+6. Sonuç buluta yüklenir, CDN ile paylaşılır.
+7. Performans ve maliyet verisi toplanır ve dashboard’a yansır.
+
+PERFORMANS GERİ BESLEME SİSTEMİ:
+- API çağrı süreleri, başarı oranları, maliyet verileri toplanır.
+- Kullanıcı etkileşimleri ve geri bildirimleri sistem parametrelerine dahil edilir.
+- Otomatik uyarılar ve optimizasyon gündeme gelir.
+
+MALİYET KONTROLÜ:
+- OpenAI API kullanım limiti belirlenir, çağrılar akıllı şekilde optimize edilir.
+- Alternatif TTS servisleri düşük maliyetli seçilir.
+- Cloud altyapı otomatik ölçeklenir ancak kullanım takibi yapılır.
+
+RİSKLER:
+- OpenAI API ücretinin öngörülenden yüksek çıkması (bütçe limitine takılma riski).
+- Dudak senkronunda yeterli kalite elde edilememe.
+- Video üretimi olmaması kullanıcı beklentisi farkı.
+- Otomasyonun stabil olmaması.
+- Karakter tutarlılığında sorunlar.
+- Kaynak kısıtları sebebiyle kapsam daralması.
+
+İLK MVP:
+- User input: Text ana karakter.
+- ChatGPT ile 5 dakikalık çocuk çizgi film senaryosu üretimi.
+- Google Cloud TTS ile ses çıktı üretimi.
+- Dudak senkronu Rhubarb ile uygulanması.
+- n8n workflow otomasyonu ile bu adımların akışının sağlanması.
+- MongoDB Atlas ile karakter ve senaryo verilerinin saklanması.
+- Basit web arayüzü üzerinden test ve performans takibi.
+
+BUGÜNÜN NET KARARI:
+V1 için en sade uygulanabilir sistem, OpenAI API tabanlı senaryo üretimi, ucuz TTS servisi ile ses sentezi, open source dudak senkronu, n8n ile workflow otomasyonu ve MongoDB ile hafıza yönetimi kombinasyonudur. Video üretimi V1 aşamada devre dışı bırakılmalı ve ilerleyen versiyonlara bırakılmalıdır.
+
+BUGÜN YAPILACAK TEK AKSİYON:
+OpenAI API üzerinden çocuk çizgi film senaryosu üretimini test edecek basit n8n workflow tasarımı hazırlanmalı (maksimum 2 USD bütçe ile).
+
+PUAN: 8/10
+NETLİK: Orta-İyi (Video üretimi eksikliği ve TTS karakter uyumu detaylarında gelişme potansiyeli var)
+
+— RAPOR SONU —
