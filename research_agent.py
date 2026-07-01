@@ -70,7 +70,7 @@ def run_research():
 
     response = client.responses.create(
         model=MODEL_NAME,
-        tools=[{"type": "web_search"}],
+        tools=[{"type": "web_search_preview"}],
         input=PROMPT
     )
 
